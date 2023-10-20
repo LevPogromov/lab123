@@ -25,18 +25,25 @@ async def matrix_handler(message: types.Message):
     numbers = [int(item) for item in newMessage]
     n = int(len(numbers) ** 0.5)
     matrix = [numbers[i:i + n] for i in range(0, n * n, n)]
-    def determinant(matrix):
+    
+    if len(numbers) ** 0.5 != int(len(numbers) ** 0.5):
+        await message.answer("Error!!! Check Instruction!!!")
+    else:
+        n = int(len(numbers) ** 0.5)
+        matrix = [numbers[i:i + n] for i in range(0, n * n, n)]
 
-        if len(matrix) == 2 and len(matrix[0]) == 2:
-            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+        def determinant(matrix):
 
-        det = 0
-        for c in range(len(matrix)):
-            sub_matrix = [row[:c] + row[c + 1:] for row in matrix[1:]]
-            # print(sub_matrix)
-            sign = (-1) ** c
-            det += sign * matrix[0][c] * determinant(sub_matrix)
-        return det
+            if len(matrix) == 2 and len(matrix[0]) == 2:
+                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+            det = 0
+            for c in range(len(matrix)):
+                sub_matrix = [row[:c] + row[c + 1:] for row in matrix[1:]]
+                # print(sub_matrix)
+                sign = (-1) ** c
+                det += sign * matrix[0][c] * determinant(sub_matrix)
+            return det
 
     try:
         await message.answer(f"determinant = {determinant(matrix)}\n"
