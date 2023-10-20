@@ -6,7 +6,6 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 import sys
-
 TOKEN = "5764312410:AAFXT-B0oyzMV31nA5uGet-KmI3AIbkcx54"
 
 dp = Dispatcher()
@@ -22,15 +21,20 @@ async def command_start_handler(message: Message):
 async def matrix_handler(message: types.Message):
 
     newMessage = message.text.split()
-    numbers = [int(item) for item in newMessage]
-    n = int(len(numbers) ** 0.5)
-    matrix = [numbers[i:i + n] for i in range(0, n * n, n)]
-    
-    if len(numbers) ** 0.5 != int(len(numbers) ** 0.5):
+    numbers = []
+    for item in newMessage:
+        try:
+            item = int(item)
+            numbers += [item]
+        except ValueError:
+            await message.answer("Uncorrect symbol!!!")
+            return;
+
+    if len(numbers)**0.5 != int(len(numbers)**0.5):
         await message.answer("Error!!! Check Instruction!!!")
     else:
-        n = int(len(numbers) ** 0.5)
-        matrix = [numbers[i:i + n] for i in range(0, n * n, n)]
+        n = int(len(numbers)**0.5)
+        matrix = [numbers[i:i+n] for i in range(0, n*n, n)]
 
         def determinant(matrix):
 
@@ -45,13 +49,18 @@ async def matrix_handler(message: types.Message):
                 det += sign * matrix[0][c] * determinant(sub_matrix)
             return det
 
-    try:
-        await message.answer(f"determinant = {determinant(matrix)}\n"
-                             f"rank = {np.linalg.matrix_rank(matrix)}\n"
-                             f"order matrix = {n}\n"
-                             f"inv matrix = {np.linalg.inv(matrix)}")
-    except TypeError:
-        await message.answer("Check instruction")
+        def checkInvMatrix(matrix):
+            if determinant(matrix) == 0: return "Singular matrix"
+            return np.linalg.inv(matrix)
+
+        try:
+            await message.answer(f"determinant = {determinant(matrix)}\n"
+                                 f"rank = {np.linalg.matrix_rank(matrix)}\n"
+                                 f"order matrix = {n}\n"
+                                 f"inv matrix = {checkInvMatrix(matrix)}")
+        except TypeError:
+            await message.answer("Check instruction")
+
 
 async def main():
     bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
