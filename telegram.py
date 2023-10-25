@@ -120,7 +120,7 @@ async def matrix_equation(message: Message):
         if determinant(matrix)==0: return "Singular matrix"
         return np.linalg.inv(matrix)
     invMatrix = checkInvMatrix(matrix)
-    if (invMatrix != "Singular matrix"):
+    if (type(invMatrix) != "str"):
         await message.answer(f"if AX = B matrix product = \n{np.dot(invMatrix, matrix2)}\n\n"
                              f"if XA = B matrix product = \n{np.dot(matrix2, invMatrix)}")
     else:
