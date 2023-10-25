@@ -116,9 +116,15 @@ async def matrix_product(message: Message):
 @dp.message(Command("equat"))
 async def matrix_equation(message: Message):
     global matrix, matrix2
-    invMatrix = np.linalg.inv(matrix)
-    await message.answer(f"if AX = B matrix product = \n{np.dot(invMatrix, matrix2)}\n\n"
-                         f"if XA = B matrix product = \n{np.dot(matrix2, invMatrix)}")
+    def checkInvMatrix(matrix):
+        if determinant(matrix)==0: return "Singular matrix"
+        return np.linalg.inv(matrix)
+    invMatrix = checkInvMatrix(matrix)
+    if (invMatrix != "Singular matrix"):
+        await message.answer(f"if AX = B matrix product = \n{np.dot(invMatrix, matrix2)}\n\n"
+                             f"if XA = B matrix product = \n{np.dot(matrix2, invMatrix)}")
+    else:
+        await message.answer(f"first matrix is Singular matrix")
 
 #save matrix
 @dp.message()
