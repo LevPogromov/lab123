@@ -33,6 +33,7 @@ async def sum_matrix(message: Message):
     await message.answer(f"sum mat = \n{sum_mat}")
 
 
+
 @dp.message(Command("matrix1"))
 async def command_enter_matrix1(message: Message):
     await message.answer("Enter matrix NxN like an in example:\n"
@@ -50,7 +51,15 @@ async def command_enter_matrix2(message: Message):
                          "\n"
                          "1 2 3\n"
                          "4 5 6\n"
-                         "7 8 9\n")
+                         "7 8 9\n"
+                         "You can use /sum\n/equat")
+
+@dp.message(Command("equat"))
+async def matrix_equation(message: Message):
+    global matrix, matrix2
+    await message.answer(f"if AX = B matrix product = \n{np.dot(np.linalg.inv(matrix), matrix2)}\n"
+                         f"if XA = B matrix product = \n{np.dot(matrix2, np.linalg.inv(matrix))}")
+
 
 @dp.message()
 async def save_matrix(message: Message):
