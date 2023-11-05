@@ -7,7 +7,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 import sys
 
-TOKEN = "5764312410:AAFXT-B0oyzMV31nA5uGet-KmI3AIbkcx54"
+TOKEN = token
 
 dp = Dispatcher()
 matrix = []
